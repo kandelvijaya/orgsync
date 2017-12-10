@@ -6,7 +6,7 @@ import config
 
 class RsyncPull:
 
-    def pull_update(self, filepath):
+    def sync_file(self, filepath):
         command = self.rsync_pull_command(filepath)
         self._perform(command)
 
@@ -22,4 +22,4 @@ class RsyncPull:
 
 if __name__ == "__main__":
     filepath = str(sys.argv[1])
-    RsyncPull().pull_update(filepath)
+    RsyncPull().sync_file(filepath)

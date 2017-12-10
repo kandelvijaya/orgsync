@@ -32,7 +32,7 @@
   "Sync org file to github repo"
   (interactive)
   (when (eq major-mode 'org-mode)
-    (shell-command-to-string (format "python ~/orgsync/rsyncer.py %s" buffer-file-name))
+    (shell-command-to-string (format "python ~/orgsync/rsyncpush.py %s" buffer-file-name))
     (message "Done rsyncing")
     ))
 
