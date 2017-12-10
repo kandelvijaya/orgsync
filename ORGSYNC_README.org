@@ -1,0 +1,54 @@
+* How to configure
+** We need 2 hooks
+   - starting: after-change-major-mode-hook
+   - saving: after-save-hook
+ 
+** locate your emacs startup file and insert the hooks 
+   - if you use spacemacs then it is .spacemacs
+   - if you use vanilla emacs then it is probably .emacs
+   - onLoad hook
+     #+BEGIN_SRC 
+;; onLoad org mode hook
+;; find if there is a corresponding file in the remote
+;; if there is then rsync it and reload
+;; if there is not then keep going
+(defun sync-from-cloud-if-possible()
+  (interactive)
+  (when (eq major-mode 'org-mode)
+    (shell-command-to-string (format "python ~/orgsync/rsyncpull.py %s" buffer-file-name))
+    (message "Done pulling!")
+    )
+  )
+
+(add-hook 'after-change-major-mode-hook #'sync-from-cloud-if-possible)
+     #+END_SRC
+
+   - onSaveHook
+     #+BEGIN_SRC 
+;; Add hooks afterSave
+;; while the mode is org-mode
+;; call python syncer. 
+(defun sync-to-cloud ()
+  "Sync org file to github repo"
+  (interactive)
+  (when (eq major-mode 'org-mode)
+    (shell-command-to-string (format "python ~/orgsync/rsyncer.py %s" buffer-file-name))
+    (message "Done rsyncing")
+    ))
+
+(add-hook 'after-save-hook #'sync-to-cloud)     
+     #+END_SRC
+
+** Clone this repo in the home directory as `orgsync` folder
+   - edit the variables in the python config.py file and use your own 
+     server 
+
+** Restart emacs. You should be good to go!
+
+** Troubleshooting
+   - If rsync takes too long and you feel emacs is freezing
+     ==> it is freezing for real. Dont worry. You will get control in
+     few seconds depending on your connection. 
+   - If rsync doesnot work, try rsyncing to your server in the terminal 
+     so that the system can authenticate you for the first time. (I havent
+     done extensive work on this part yet.)
