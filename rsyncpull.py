@@ -20,6 +20,23 @@ class RsyncPull:
         subprocess.run(command)
 
 
+class GitPull:
+
+    def sync_file(self, filepath):
+        '''from the immediate directory of the filename, stash
+        any changes and pull from notes branch'''
+        curdir = os.path.dirname(filepath)
+        subprocess.run(["cd", curdir])
+        git_stash_return = subprocess.run(["git", "stash"])
+        if git_stash_return.returncode == 0:
+            subprocess.run(["git", "pull", "origin", "notes"])
+
+
 if __name__ == "__main__":
-    filepath = str(sys.argv[1])
-    RsyncPull().sync_file(filepath)
+    if len(sys.argv) == 3:
+        strategy = str(sys.argv[1])
+        filepath = str(sys.argv[2])
+        if strategy == "rsync":
+            RsyncPull().sync_file(filepath)
+        elif strategy == "git":
+            GitPull().sync_file(filepath)

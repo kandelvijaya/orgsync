@@ -16,3 +16,4 @@ class RsyncPullTest(unittest.TestCase):
         self.assertEqual(command[1],
                          config.remote_server_note_path + "filename.org")
         self.assertEqual(command[2], filepath)
+

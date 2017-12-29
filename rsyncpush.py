@@ -2,6 +2,7 @@ import sys
 import os
 import subprocess
 import config
+import datetime
 
 
 class RSyncPush:
@@ -19,6 +20,24 @@ class RSyncPush:
         self._perform(command)
 
 
+class GitPush:
+
+    def sync_file(self, file_path):
+        curdir = os.path.dirname(file_path)
+        subprocess.call(["cd", curdir])
+        subprocess.call(["git", "add", file_path])
+        curdatetime = str(datetime.datetime.now())
+        filename = os.path.basename(file_path)
+        commit_msg = "SyncOnSave @" + curdatetime + " @ " + filename
+        subprocess.call(["git", "commit", "-m", commit_msg])
+        subprocess.call(["git", "push", "origin", "notes"])
+
+
 if __name__ == "__main__":
-    file_path = sys.argv[1]
-    RSyncPush().sync_file(file_path)
+    if len(sys.argv) == 3:
+        strategy = sys.argv[1]
+        file_path = sys.argv[2]
+        if strategy == "rsync":
+            RSyncPush().sync_file(file_path)
+        elif strategy == "git":
+            GitPush().sync_file(file_path)
