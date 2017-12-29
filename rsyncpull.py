@@ -29,7 +29,7 @@ class GitPull:
         subprocess.run(["cd", curdir])
         git_stash_return = subprocess.run(["git", "stash"])
         if git_stash_return.returncode == 0:
-            subprocess.run(["git", "pull", "origin", "notes"])
+            subprocess.run(["git", "pull", "origin", "master"])
 
 
 if __name__ == "__main__":

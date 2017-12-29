@@ -30,7 +30,7 @@ class GitPush:
         filename = os.path.basename(file_path)
         commit_msg = "SyncOnSave @" + curdatetime + " @ " + filename
         subprocess.call(["git", "commit", "-m", commit_msg])
-        subprocess.call(["git", "push", "origin", "notes"])
+        subprocess.call(["git", "push", "origin", "master"])
 
 
 if __name__ == "__main__":
