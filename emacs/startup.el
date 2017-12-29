@@ -34,13 +34,12 @@
 (defun sync-from-cloud-if-possible()
   (interactive)
   (when (org-file-not-readme)
-    (shell-command-to-string (format "python ~/orgsync/rsyncpull.py %s" buffer-file-name))
+    (message (shell-command-to-string (format "python ~/orgsync/rsyncpull.py git %s" buffer-file-name)))
     (message "Done pulling!")
     )
   )
 
 (add-hook 'after-change-major-mode-hook #'sync-from-cloud-if-possible)
-
 
 
 ;; Add hooks afterSave
@@ -50,8 +49,7 @@
   "Sync org file to github repo"
   (interactive)
   (when (org-file-not-readme)
-    (shell-command-to-string (format "python ~/orgsync/rsyncpush.py %s" buffer-file-name))
-    (message "Done rsyncing")
+    (message (shell-command-to-string (format "python ~/orgsync/rsyncpush.py git %s" buffer-file-name)))
     ))
 
 (add-hook 'after-save-hook #'sync-to-cloud)
