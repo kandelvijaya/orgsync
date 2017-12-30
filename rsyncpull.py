@@ -27,9 +27,12 @@ class GitPull:
         any changes and pull from notes branch'''
         curdir = os.path.dirname(filepath)
         subprocess.run(["cd", curdir])
-        git_stash_return = subprocess.run(["git", "stash"])
-        if git_stash_return.returncode == 0:
-            subprocess.run(["git", "pull", "origin", "master"])
+        if os.path.isdir(os.path.join(os.getcwd(), ".git")):
+            git_stash_return = subprocess.run(["git", "stash"])
+            if git_stash_return.returncode == 0:
+                subprocess.run(["git", "pull", "origin", "master"])
+        else:
+            RsyncPull().sync_file(filepath)
 
 
 if __name__ == "__main__":

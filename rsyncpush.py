@@ -25,12 +25,15 @@ class GitPush:
     def sync_file(self, file_path):
         curdir = os.path.dirname(file_path)
         subprocess.call(["cd", curdir])
-        subprocess.call(["git", "add", file_path])
-        curdatetime = str(datetime.datetime.now())
-        filename = os.path.basename(file_path)
-        commit_msg = "SyncOnSave @" + curdatetime + " @ " + filename
-        subprocess.call(["git", "commit", "-m", commit_msg])
-        subprocess.call(["git", "push", "origin", "master"])
+        if os.path.isdir(os.path.join(os.getcwd(), ".git")):
+            subprocess.call(["git", "add", file_path])
+            curdatetime = str(datetime.datetime.now())
+            filename = os.path.basename(file_path)
+            commit_msg = "SyncOnSave @" + curdatetime + " @ " + filename
+            subprocess.call(["git", "commit", "-m", commit_msg])
+            subprocess.call(["git", "push", "origin", "master"])
+        else:
+            RSyncPush().sync_file(file_path)
 
 
 if __name__ == "__main__":
