@@ -85,6 +85,7 @@
 (defun org-note-add-todays-entry ()
   "Insert todays entry if one doesnot exist already"
   (interactive)
+  (goto-char (point-max))               ;goto end of the file
   (insert "\n")
   (insert (format "* %s" (org-note-todays-stamp)))
   (insert "
@@ -98,12 +99,13 @@
 ** Q3 Task(Not-urgent & Important)         
 *** 
 
-** Q4 Task(Neither Urgent nor Imporntant)  
+** Q4 Task(Neither Urgent nor Important)  
 *** 
 
 ** Todays Journal
   ")
   )
+
 
 
 (defun org-note-todays-stamp ()
@@ -122,4 +124,3 @@
 (defun org-note-carry-over-incomplete-tasks ()
   ()
  )
-
