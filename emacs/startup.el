@@ -8,7 +8,7 @@
 ;; set default keys for org-mode todo
 ;; for each mode change record a time stamp
 (setq org-todo-keywords
-      '((sequence "TODO" "PROGRESS(/!)" "DONE(/!)"))
+      '((sequence "TODO" "PROGRESS(/!)" "|" "DONE(/!)" "DELEGATED(/!)"))
       )
 
 ;; set a timestamp when some items are done
