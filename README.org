@@ -2,48 +2,59 @@
 ** We need 2 hooks
    - starting: after-change-major-mode-hook
    - saving: after-save-hook
- 
-** locate your emacs startup file and insert the hooks 
-   - if you use spacemacs then it is .spacemacs
-   - if you use vanilla emacs then it is probably .emacs
-   - onLoad hook
+
+** Installation
+   - Clone this repo / download to `~/orgsync` path. Of course, custom location are fine.
+   - In your `.emacs` or `.spacemacs` file, at the very end place this block to load our custom script
      #+BEGIN_SRC elisp
-;; onLoad org mode hook
-;; find if there is a corresponding file in the remote
-;; if there is then rsync it and reload
-;; if there is not then keep going
-(defun sync-from-cloud-if-possible()
-  (interactive)
-  (when (eq major-mode 'org-mode)
-    ;; you can either use `rsync` or `git` as strategy
-    (shell-command-to-string (format "python ~/orgsync/pull.py git %s" buffer-file-name))
-    (message "Done pulling!")
-    )
-  )
-
-(add-hook 'after-change-major-mode-hook #'sync-from-cloud-if-possible)
+     ;; Load custom startup functions
+     (load "~/orgsync/emacs/startup")
+     ;; if you used a different directory then change it here.
      #+END_SRC
+   - Thats it! 
 
-   - onSaveHook
-     #+BEGIN_SRC elisp
-;; Add hooks afterSave
-;; while the mode is org-mode
-;; call python syncer. 
-(defun sync-to-cloud ()
-  "Sync org file to github repo"
-  (interactive)
-  (when (eq major-mode 'org-mode)
-    ;; you can use `rsync` or `git` as strategy
-    (shell-command-to-string (format "python ~/orgsync/push.py %s" buffer-file-name))
-    (message "Done rsyncing")
-    ))
+** Default behavior
+   - We load the script on emacs/spacemacs launch. This adds hook for org-mode file open & file save.
+   - On file open/save we trigger pull (to retrieve) / push (to store) the org file.
+   - There are 2 strategy to do so. `Rsync` to a path or Use git. Default is to use `git`.
+   - If you open a org file on a directory under git source control; it will commit and push to master. This can be changed by changing parameter in push.py
+   - Either you use rsync or git, there is a delay to load/store file. Allow few seconds in this process.
 
-(add-hook 'after-save-hook #'sync-to-cloud)     
-     #+END_SRC
+** Concept Aside
+*** onLoad hook
+      #+BEGIN_SRC elisp
+ ;; onLoad org mode hook
+ ;; find if there is a corresponding file in the remote
+ ;; if there is then rsync it and reload
+ ;; if there is not then keep going
+ (defun sync-from-cloud-if-possible()
+   (interactive)
+   (when (eq major-mode 'org-mode)
+     ;; you can either use `rsync` or `git` as strategy
+     (shell-command-to-string (format "python ~/orgsync/pull.py git %s" buffer-file-name))
+     (message "Done pulling!")
+     )
+   )
 
-** Clone this repo in the home directory as `orgsync` folder
-   - edit the variables in the python config.py file and use your own 
-     server 
+ (add-hook 'after-change-major-mode-hook #'sync-from-cloud-if-possible)
+      #+END_SRC
+
+*** onSaveHook
+      #+BEGIN_SRC elisp
+ ;; Add hooks afterSave
+ ;; while the mode is org-mode
+ ;; call python syncer. 
+ (defun sync-to-cloud ()
+   "Sync org file to github repo"
+   (interactive)
+   (when (eq major-mode 'org-mode)
+     ;; you can use `rsync` or `git` as strategy
+     (shell-command-to-string (format "python ~/orgsync/push.py %s" buffer-file-name))
+     (message "Done rsyncing")
+     ))
+
+ (add-hook 'after-save-hook #'sync-to-cloud)     
+      #+END_SRC
 
 ** Restart emacs. You should be good to go!
 
