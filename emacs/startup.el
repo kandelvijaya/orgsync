@@ -14,6 +14,14 @@
 ;; set a timestamp when some items are done
 (setq org-log-done 'time)  ;; use 'note for note taking
 
+
+;; set org-mode globals
+(global-set-key "\C-cl" 'org-store-link)
+(global-set-key "\C-ca" 'org-agenda)
+(global-set-key "\C-cc" 'org-capture)
+(global-set-key "\C-cb" 'org-iswitchb)
+(global-set-key "\C-cl" 'org-store-link)
+
 ;; set tags for common task context
 (setq org-tag-alist '(
                       (:startgroup . nil)
