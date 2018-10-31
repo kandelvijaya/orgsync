@@ -7,7 +7,7 @@
    - if you use spacemacs then it is .spacemacs
    - if you use vanilla emacs then it is probably .emacs
    - onLoad hook
-     #+BEGIN_SRC 
+     #+BEGIN_SRC elisp
 ;; onLoad org mode hook
 ;; find if there is a corresponding file in the remote
 ;; if there is then rsync it and reload
@@ -15,7 +15,8 @@
 (defun sync-from-cloud-if-possible()
   (interactive)
   (when (eq major-mode 'org-mode)
-    (shell-command-to-string (format "python ~/orgsync/rsyncpull.py git%s" buffer-file-name))
+    ;; you can either use `rsync` or `git` as strategy
+    (shell-command-to-string (format "python ~/orgsync/pull.py git %s" buffer-file-name))
     (message "Done pulling!")
     )
   )
@@ -24,7 +25,7 @@
      #+END_SRC
 
    - onSaveHook
-     #+BEGIN_SRC 
+     #+BEGIN_SRC elisp
 ;; Add hooks afterSave
 ;; while the mode is org-mode
 ;; call python syncer. 
@@ -32,7 +33,8 @@
   "Sync org file to github repo"
   (interactive)
   (when (eq major-mode 'org-mode)
-    (shell-command-to-string (format "python ~/orgsync/rsyncpush.py %s" buffer-file-name))
+    ;; you can use `rsync` or `git` as strategy
+    (shell-command-to-string (format "python ~/orgsync/push.py %s" buffer-file-name))
     (message "Done rsyncing")
     ))
 

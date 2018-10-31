@@ -34,7 +34,7 @@
 (defun sync-from-cloud-if-possible()
   (interactive)
   (when (org-file-not-readme)
-    (message (shell-command-to-string (format "python ~/orgsync/rsyncpull.py git %s" buffer-file-name)))
+    (message (shell-command-to-string (format "python ~/orgsync/pull.py git %s" buffer-file-name)))
     (message "Done pulling!")
     )
   )
@@ -49,7 +49,7 @@
   "Sync org file to github repo"
   (interactive)
   (when (org-file-not-readme)
-    (message (shell-command-to-string (format "python ~/orgsync/rsyncpush.py git %s" buffer-file-name)))
+    (message (shell-command-to-string (format "python ~/orgsync/push.py git %s" buffer-file-name)))
     ))
 
 (add-hook 'after-save-hook #'sync-to-cloud)
