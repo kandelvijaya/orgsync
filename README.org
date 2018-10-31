@@ -15,7 +15,7 @@
 (defun sync-from-cloud-if-possible()
   (interactive)
   (when (eq major-mode 'org-mode)
-    (shell-command-to-string (format "python ~/orgsync/rsyncpull.py %s" buffer-file-name))
+    (shell-command-to-string (format "python ~/orgsync/rsyncpull.py git%s" buffer-file-name))
     (message "Done pulling!")
     )
   )
